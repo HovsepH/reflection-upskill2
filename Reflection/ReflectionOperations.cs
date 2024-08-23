@@ -20,9 +20,9 @@ namespace Reflection
         public static string GetFullTypeName<T>()
         {
             Type type = typeof(T);
-            if (type.FullName == null)
+            if (string.IsNullOrEmpty(type.FullName))
             {
-                throw new ArgumentNullException();
+                throw new InvalidOperationException("The type's FullName is null or empty.");
             }
 
             return type.FullName;
@@ -31,6 +31,11 @@ namespace Reflection
         public static string GetAssemblyQualifiedName<T>()
         {
             Type type = typeof(T);
+            if (string.IsNullOrEmpty(type.AssemblyQualifiedName))
+            {
+                throw new InvalidOperationException("The type's FullName is null or empty.");
+            }
+
             return type.AssemblyQualifiedName;
         }
 
@@ -46,7 +51,7 @@ namespace Reflection
             string[] fieldNames = new string[fields.Length];
             for (int i = 0; i < fields.Length; i++)
             {
-                fieldNames[i] = fields[i]?.ToString() ?? " ";
+                fieldNames[i] = fields[i]?.Name ?? " ";
             }
 
             return fieldNames;
@@ -64,7 +69,7 @@ namespace Reflection
             string[] fieldNames = new string[fields.Length];
             for (int i = 0; i < fields.Length; i++)
             {
-                fieldNames[i] = fields[i]?.ToString() ?? " ";
+                fieldNames[i] = fields[i]?.Name ?? " ";
             }
 
             return fieldNames;
@@ -115,7 +120,7 @@ namespace Reflection
             }
 
             Type type = obj.GetType();
-            MemberInfo[] members = type.GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            MemberInfo[] members = type.GetMembers(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
             string?[] membersDetails = new string?[members.Length];
             for (int i = 0; i < members.Length; i++)
             {
@@ -133,7 +138,7 @@ namespace Reflection
             }
 
             Type type = obj.GetType();
-            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
             string?[] methodDetails = new string?[methods.Length];
             for (int i = 0; i < methods.Length; i++)
             {
