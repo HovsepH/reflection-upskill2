@@ -4,6 +4,7 @@ using System.Reflection;
 
 namespace Reflection
 {
+#pragma warning disable S3011
     public static class ReflectionOperations
     {
         public static string GetTypeName(object obj)
